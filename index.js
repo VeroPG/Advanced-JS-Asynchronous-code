@@ -126,9 +126,6 @@ document.getElementById("buscar").addEventListener("click", function () {
 });
  */
 
-
-
-
 // 9 Dada una lista de usuarios de github guardada en una array,crea una funcion fetchGithubUsers(userNames) que utilice
 //'https://api.github.com/users/${name}' para obtener el nombre de cada usuario.
 // Objetivo: Usar Promise.all()
@@ -154,3 +151,20 @@ function fetchGithubUsers(userNames) {
   });
   return Promise.all(arr);
 }
+
+// Solucion chef y refactorizacion
+function fetchGithubUsers(userNames) {
+  // [user1,user2]
+  return Promise.all(
+    userNames.map((user) =>
+      fetch(`https://api.github.com/users/${user}`).then((res) => res.json())
+    )
+  ).then((dataUsers) => {
+    dataUsers.forEach((user) => console.log(user.login));
+    return dataUsers;
+  });
+}
+
+fetchGithubUsers(["RLVM13", "2Tucho"]).then((data) =>
+  console.log(data.map((user) => user.login))
+);
